@@ -1,0 +1,992 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{matlab-prettifier}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement H
+\paperfontsize default
+\spacing double
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2cm
+\topmargin 1cm
+\rightmargin 2cm
+\bottommargin 3cm
+\headheight 0.5cm
+\headsep 0.5cm
+\footskip 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\listings_params "style={Matlab-editor}"
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+CH5540 Multivariate Data Analysis - Assignment 4
+\end_layout
+
+\begin_layout Author
+Varun Vankineni
+\end_layout
+
+\begin_layout Author
+AE14B050
+\end_layout
+
+\begin_layout Subsection*
+Introduction
+\end_layout
+
+\begin_layout Standard
+For the purpose of this assignment we create two functions in matlab namely
+ OLSNCA.m and fastNCA.m .
+ The former is the basic rational matrix solving method which incorporates
+ OLS for solving multiple equation cases.
+ while the later uses the fastNCA algorithm to do NCA.
+ Below are both the functions.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "OLSNCA.m"
+lstparams "caption={Ordinary OLS based NCA},label={Ordinary OLS based NCA}"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "fastNCA.m"
+lstparams "caption={fastNCA implementation},label={fastNCA implementation}"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Solution 1:
+\end_layout
+
+\begin_layout Paragraph*
+(a) NCA compliance:
+\end_layout
+
+\begin_layout Standard
+From the given network we shall create a structure for the connectivity
+ matrix,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+C_{struct}=[\begin{array}{ccc}
+x & x & 0\\
+x & 0 & x\\
+0 & x & x\\
+x & 0 & x\\
+x & x & 0\\
+x & 0 & x\\
+0 & x & x
+\end{array}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here the unknown values are denoted by x while the known disconnection is
+ given by 0s.
+\end_layout
+
+\begin_layout Itemize
+The given structure has [2,3,2] zeros in each column which conforms to the
+ basic rules of compliance where at least (
+\begin_inset Formula $n_{s}-1$
+\end_inset
+
+) zeros are required in each column.
+ Here 
+\begin_inset Formula $n_{s}=3$
+\end_inset
+
+ hence this criterion is satisfied.
+\end_layout
+
+\begin_layout Itemize
+The given structure is also full column ranked as no two columns have the
+ same structure.
+ 
+\end_layout
+
+\begin_layout Standard
+The above two conditions are enough to establish NCA compliance and hence
+ the given structure is NCA compliant.
+\end_layout
+
+\begin_layout Paragraph*
+(b) OLS-NCA:
+\end_layout
+
+\begin_layout Standard
+As mentioned before we use the above OLSNCA function created to find all
+ the required matrices.
+ Denoising of the data is also taken care of the algorithm internally.
+ Following is the rotation matrix,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+M=[\begin{array}{ccc}
+1 & 2.5966 & 9.3257\\
+0.2702 & 1 & -11.7212\\
+1.5566 & -0.2113 & 1
+\end{array}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The correlation matrix between pure absorbance spectra and estimated pure
+ absorbance spectra is obtained as,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Corr=[\begin{array}{ccc}
+-0.9425 & 0.4291 & 0.4343\\
+0.3662 & -0.9968 & -0.3815\\
+0.4940 & -0.4074 & -0.9967
+\end{array}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Negative values just mean a negative scaling of the spectra but are essentially
+ highly correlated.
+ We hence observe that the estimated absorbance spectrum conforms to the
+ pure absorbance spectrum.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "sol1a.m"
+lstparams "caption={Matlab code for solution 1 },label={solution 1 }"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Solution 4(1c):
+\end_layout
+
+\begin_layout Paragraph*
+fastNCA:
+\end_layout
+
+\begin_layout Standard
+We now use the fastNCA function created.
+ Denoising of the data is also taken care of in the algorithm internally.
+ The correlation matrix between pure absorbance spectra and estimated pure
+ absorbance spectra is obtained as,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Corr=[\begin{array}{ccc}
+-0.9425 & -0.4291 & -0.4343\\
+0.3661 & 0.9968 & 0.3815\\
+0.4940 & 0.4074 & 0.9967
+\end{array}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Negative values just mean a negative scaling of the spectra but are essentially
+ highly correlated.
+ We hence observe that the estimated absorbance spectrum conforms to the
+ pure absorbance spectrum.
+\end_layout
+
+\begin_layout Standard
+Both the OLSNCA and fastNCA give the same results here as the difference
+ between the number of variables and equations is just 1 (7 equations or
+ zeros but only 6 variables).
+ If the number of equations are much larger, the correlation matrices in
+ both cases will be comparatively different.
+ 
+\end_layout
+
+\begin_layout Subsection*
+Solutions 2:
+\end_layout
+
+\begin_layout Standard
+Using NCA as before we obtain the following list of temporal expression
+ levels ordered from highest to lowest.
+ As we observe we are able to identify most of the TFs as given in the question
+ with just 1 error (YAP6) in the first 11 major TFs.
+ The missing STB1 is found close by at 14 .
+\end_layout
+
+\begin_layout Standard
+1-5: 
+\begin_inset Formula $['ACE2','SWI4','MBP1','NDD1','FKH2']$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+6-10:
+\begin_inset Formula $['SWI6','SKN7','MCM1','SWI5','FKH1']$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+11-15:
+\begin_inset Formula $['YAP6','PHD1','STE12','STB1','RAP1']$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+16-20:
+\begin_inset Formula $['PHO4','ABF1','HSF1','RLM1','YAP1']$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+21-25:
+\begin_inset Formula $['SMP1','CIN5','NRG1','RFX1','RME1']$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+26-30:
+\begin_inset Formula $['HIR2','REB1','MSN4','FHL1','DIG1']$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+31-33:
+\begin_inset Formula $['GRF10(Pho2)','HIR1','GCN4']$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "sol2a.m"
+lstparams "caption={Solution 2}"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Solutions 3:
+\end_layout
+
+\begin_layout Paragraph*
+(a) First samples:
+\end_layout
+
+\begin_layout Standard
+We use the following matlab code for both (a) and (b).
+ nmf.
+ mat has been used to find implement the nmf algorithm.
+ The initialized variables are given as guided by the question.
+ The following is the correlation matrix in tabulated form.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="4">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Est↓
+\backslash
+True→
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Ni
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Cr
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Co
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Unknown1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.8844
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.5887
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-0.5728
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Unknown2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.2879
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.8324
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-0.1036
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Unknown3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-0.0296
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-0.5106
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.5370
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace smallskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+From the correlation values it very plain to observe that the Unknown1 is
+ most probably Ni while Unknown2 is Cr with correlation coefficients greater
+ than 0.8 .
+ Unknown 3 is most correlated with Co but also closely correlated with Cr.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Est
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Connected True
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Unknown1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Ni
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Unknown2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Cr
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Unknown3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Co
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can say Both Ni and Cr are being extracted very well while Co is very
+ poorly extracted from the data.
+\end_layout
+
+\begin_layout Paragraph*
+(b) Averaged samples:
+\end_layout
+
+\begin_layout Standard
+The above procedure is again followed and we tabulate our correlation matrix
+ as follows,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="4">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Est↓
+\backslash
+True→
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Ni
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Cr
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Co
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Unknown1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.8947
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.5406
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-0.4725
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Unknown2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-0.2481
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-0.4381
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.8728
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Unknown3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.4132
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.9603
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-0.4456
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+From the correlation values we observe that the Unknown1 is most probably
+ Ni, Unknown2 is Co and Unknown3 is Cr with correlation coefficients greater
+ than 0.8 .
+ The following is the corresponding table showing which Unknown is correlated
+ to which pure component spectra.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="4" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Est
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Connected True
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Unknown1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Ni
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Unknown2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Co
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Unknown3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Cr
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+There is a huge improvement in that the correlation coeeficients are much
+ larger and it is very easy to distinguish using the averaged data.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "sol3.m"
+lstparams "caption={Matlab code for solution 3},label={solution 3}"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
