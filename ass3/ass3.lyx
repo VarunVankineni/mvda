@@ -1,0 +1,1567 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement H
+\paperfontsize default
+\spacing double
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2cm
+\topmargin 1cm
+\rightmargin 2cm
+\bottommargin 3cm
+\headheight 0.5cm
+\headsep 0.5cm
+\footskip 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+CH5540 Multivariate Data Analysis - Assignment 3
+\end_layout
+
+\begin_layout Author
+Varun Vankineni
+\end_layout
+
+\begin_layout Author
+AE14B050
+\end_layout
+
+\begin_layout Subsection*
+Solution 1:
+\end_layout
+
+\begin_layout Paragraph*
+(a) Procedure:
+\end_layout
+
+\begin_layout Standard
+Given to us is dataset of 1000 samples with both true and measured values.
+ Also given are the error standard deviations and true constraint matrix.
+\end_layout
+
+\begin_layout Standard
+To apply PCA and get the relational matrix between the dependent and independent
+ variables we use the following procedure:
+\end_layout
+
+\begin_layout Itemize
+Create a Cholesky transform inverse from the true error standard deviations
+ 
+\begin_inset Formula $L^{T}=[diag(1/std)]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Scale the measured 
+\begin_inset Formula $Fmeas$
+\end_inset
+
+ data using 
+\begin_inset Formula $L^{T}$
+\end_inset
+
+and create 
+\begin_inset Formula $Fs=Fmeas*L^{T}/\sqrt{samples}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+We can now apply PCA as all the error standard deviations are equal
+\end_layout
+
+\begin_layout Itemize
+Perform SVD to obtain the eigenvectors of both the true data 
+\begin_inset Formula $Ftrue$
+\end_inset
+
+ and scaled data 
+\begin_inset Formula $Fs$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Transpose and reindex the eigenvectors to obtain the constraint matrices
+ for both the true data and measured data
+\end_layout
+
+\begin_layout Itemize
+Scale back the constraint matrix obtained from 
+\begin_inset Formula $Fs$
+\end_inset
+
+ back into the original space as 
+\begin_inset Formula $\hat{A}=\hat{A}*L^{T}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Select the possible dependent and independent variables and select only
+ the top '
+\begin_inset Formula $d$
+\end_inset
+
+' constraints where 
+\begin_inset Formula $d$
+\end_inset
+
+ in the number of dependent variables
+\end_layout
+
+\begin_layout Itemize
+Seperate the constraint matrices into dependent and independent parts so
+ that we have the equation 
+\begin_inset Formula $A_{D}X_{D}+A_{I}X_{I}=0$
+\end_inset
+
+ which is a sliced version of 
+\begin_inset Formula $AX=0$
+\end_inset
+
+ (Here 
+\begin_inset Formula $X$
+\end_inset
+
+ is our data matrix, whether true or measured and 
+\begin_inset Formula $A$
+\end_inset
+
+ is the corresponding constraint matrix)
+\end_layout
+
+\begin_layout Itemize
+Calculate the regression model to get dependent variables as 
+\begin_inset Formula $X_{D}=R*X_{I}$
+\end_inset
+
+ ( where 
+\begin_inset Formula $R=(-A_{D}^{-1}*A_{I})$
+\end_inset
+
+ ) for both measured and true data
+\end_layout
+
+\begin_layout Itemize
+We can now compare our regression coefficient matrices 
+\begin_inset Formula $R$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{R}$
+\end_inset
+
+ by calculating the differences between them and finding the maximum of
+ each coefficient
+\end_layout
+
+\begin_layout Paragraph*
+F3, F5 Independent:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{R}=[\begin{array}{cc}
+0.0058 & 0.9890\\
+0.9747 & -0.9502\\
+0.9470 & 0.1059
+\end{array}];R=[\begin{array}{cc}
+0 & 1.000\\
+1.0000 & -1.000\\
+1.000 & 0
+\end{array}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+maxDiff=0.10595
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The denpendency of F4 on F5 shows the highest difference compared to the
+ true regression model.
+\end_layout
+
+\begin_layout Paragraph*
+(b) F1 independent :
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{R}=[\begin{array}{c}
+1.0016\\
+2.0018\\
+2.0017\\
+0.9993
+\end{array}];R=[\begin{array}{c}
+1.0015\\
+2.0015\\
+2.0015\\
+1.000
+\end{array}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+maxDiff=6.5110e-04
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Even though the diffenerence is very small both in order and value, the
+ denpendency of F1 on F5 shows the highest difference compared to the true
+ regression model.
+ 
+\end_layout
+
+\begin_layout Paragraph*
+F1,F2,F3 independent :
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{R}=[\begin{array}{ccc}
+0.5773 & 0.4894 & 0.4667\\
+0.5487 & -0.4812 & 0.4658
+\end{array}];R=[\begin{array}{ccc}
+0 & 0 & 1.000\\
+0.0119 & -0.9881 & 0.9881
+\end{array}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+maxDiff=0.5773
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As we observe the diffenerence is very large for almost all the values,
+ the denpendency of F4 on F1 shows the highest difference compared to the
+ true regression model.
+ This is generally a case of wrong assumptions of our independent and dependent
+ variables or more precisely choosing the number dependent variables less
+ then the number of true constraint equations.
+ 
+\end_layout
+
+\begin_layout Paragraph
+(c)IPCA procedure:
+\end_layout
+
+\begin_layout Standard
+We follow a very similar approach in IPCA when we are comparing our regression
+ models but the selection of variables in PCA application is revamped so
+ that we do need the true standard deviations of the errors.
+ To apply IPCA we use the following procedure:
+\end_layout
+
+\begin_layout Itemize
+Initialize a Cholesky transform inverse using 
+\begin_inset Formula $I$
+\end_inset
+
+ matrix scaled by 
+\begin_inset Formula $\sqrt{samples}$
+\end_inset
+
+, 
+\begin_inset Formula $L^{T}=I/\sqrt{samples}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Select a set of indenpendent variables and a convergence criterion to stop
+ our iterative PCA loop
+\end_layout
+
+\begin_layout Itemize
+We then start an iterative loop until we predict error standard deviations
+ correctly
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Scale the measured 
+\begin_inset Formula $Fmeas$
+\end_inset
+
+ data using 
+\begin_inset Formula $L^{T}$
+\end_inset
+
+and create 
+\begin_inset Formula $Fs=Fmeas*L^{T}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Perform SVD obtain the eigen vectors of the scaled data 
+\begin_inset Formula $Fs$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Calculate sum of the least '
+\begin_inset Formula $d$
+\end_inset
+
+' eigenvalues where d is the number of dependent variables 
+\end_layout
+
+\begin_layout Itemize
+Check if the difference betweent the sum from the previous iteration and
+ this new sum is satifies our convergence criterion and if it does, we stop
+ with this iteration
+\end_layout
+
+\begin_layout Itemize
+Store the eigenvalue sum to be used in the next iteration, if any
+\end_layout
+
+\begin_layout Itemize
+Transpose and reindex the eigenvectors to obtain the constraint matrices
+ for the measured data
+\end_layout
+
+\begin_layout Itemize
+Scale back the constraint matrix obtained from 
+\begin_inset Formula $Fs$
+\end_inset
+
+ back into the original space as 
+\begin_inset Formula $\hat{A}=\hat{A}*L^{T}$
+\end_inset
+
+and select only the top 
+\begin_inset Formula $d$
+\end_inset
+
+ constraints
+\end_layout
+
+\begin_layout Itemize
+Estimate the new standard deviations using the 
+\begin_inset Formula $stdest()$
+\end_inset
+
+ function
+\end_layout
+
+\begin_layout Itemize
+Calculate the new 
+\begin_inset Formula $L^{T}=[diag(1/std)]/\sqrt{samples}]$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+We output the final constraint matrix 
+\begin_inset Formula $\hat{A}$
+\end_inset
+
+ to be used to calculate our regression model and comparision with the true
+ constraint matrix just as in the PCA format.
+\end_layout
+
+\begin_layout Paragraph*
+F1,F2 independent:
+\end_layout
+
+\begin_layout Standard
+Upon following the basic procedure to obrain the regression matrix as given
+ by the PCA procedure we obtain the regression model for our IPCA variant
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\hat{R}=[\begin{array}{cc}
+0.9666 & 1.0335\\
+1.0231 & 0.9769\\
+1.0029 & -0.0036
+\end{array}];R=[\begin{array}{cc}
+1 & 1\\
+1 & 1\\
+1 & 0
+\end{array}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+maxDiff=0.0335
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph*
+Determining independent variables:
+\end_layout
+
+\begin_layout Standard
+There are theoretical aspects to be noted in IPCA.
+ If we select the number of dependent variables to be too small, the number
+ of constraint equations we get might have not be enough to perform the
+ estimation step and it requires at least 
+\begin_inset Formula $m$
+\end_inset
+
+ constraint equation such that 
+\begin_inset Formula $\frac{m(m+1)}{2}\geq n$
+\end_inset
+
+ where 
+\begin_inset Formula $n$
+\end_inset
+
+ is the number of varibles for which we need to obtain the error standard
+ deviations.
+ 
+\end_layout
+
+\begin_layout Standard
+For our current case this limits us to atleast 3 dependent variables to
+ obtain error standard deviation estimates for all the 5 variables.
+\end_layout
+
+\begin_layout Standard
+To find the number of independent variables we just loop over the two cases
+ of 1 and 2 independent variables and find which of the two cases has a
+ lower 
+\begin_inset Formula $Svar=\frac{1}{d}\sum_{i=1}^{i=d}(\lambda_{i}-1)^{2}$
+\end_inset
+
+.
+ If we have chosen correctly, this value will be very low as the 
+\begin_inset Formula $d$
+\end_inset
+
+ least eigen values will be distrubuted around 
+\begin_inset Formula $1$
+\end_inset
+
+.
+ It has to be noted that this procedure only applies when the scaling is
+ done using the 
+\begin_inset Formula $\sqrt{samples}$
+\end_inset
+
+as in this case.
+\end_layout
+
+\begin_layout Standard
+In the general sense we just iterate and find the case with the lowest 
+\begin_inset Formula $Svar$
+\end_inset
+
+ that also satisifies the basic IPCA solution constraint.
+\end_layout
+
+\begin_layout Paragraph*
+(d) Determining set of independent variables:
+\end_layout
+
+\begin_layout Standard
+We shall use the information obtained from the before step that the number
+ of independent variables is 2.
+\end_layout
+
+\begin_layout Standard
+We now iterate over all the possible pairs of independent variables and
+ calculate the value of maxDiff for each case.
+ We tabulate below the results
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Tabular
+<lyxtabular version="3" rows="6" columns="6">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+F1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+F2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+F3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+F4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+F5
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+F1
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.0335
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.1094
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.1157
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+inf(4.4683e15)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+F2
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.1170
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.1105
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.0369
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+F3
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+inf(2.014e15)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.1087
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+F4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+0.1150
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+F5
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+-
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\size footnotesize
+duplicate and same variable pairs calculations are left blank
+\end_layout
+
+\begin_layout Plain Layout
+
+\size footnotesize
+inf - denotes that the dependent variable constraint matrix is singular
+ and hence is a worst case 
+\size default
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+maxDiff for all two variable pairs
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The cases of (
+\begin_inset Formula $F1,F5$
+\end_inset
+
+) and (
+\begin_inset Formula $F3,F4$
+\end_inset
+
+) both result in singular dependent variable constraint matirces and are
+ hence worst choices, the former case being the worse of the two pairs.
+ 
+\end_layout
+
+\begin_layout Standard
+The case of (
+\begin_inset Formula $F1,F2$
+\end_inset
+
+) gives the lowest maxDiff and is hence the best possibles choice of independent
+ variables.
+ 
+\end_layout
+
+\begin_layout Subsection*
+Solution 2:
+\end_layout
+
+\begin_layout Standard
+Given to us are 2 dataset, DATA comprising of the absorbance spectrum for
+ each sample and CONC, detailing the concentration of each non-reacting
+ elements in the sample.
+ We also have 3 pure absorbance spectrum vectors corresponding to each of
+ the elements and their corresponding concentrations.
+\end_layout
+
+\begin_layout Standard
+As directed in the question we seperate the 1st sample from the 5 samples
+ for each mixture to be used as our LOOCV or the testing data.
+ We use the rest to train our OLS models.
+\end_layout
+
+\begin_layout Paragraph*
+(a)Pure component spectra:
+\end_layout
+
+\begin_layout Standard
+From the pure component spectra we obtain the maximum wavelength for each
+ of the species.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="2" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Co
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Cr
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Ni
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+510nm
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+406nm
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+394nm
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+From these wavelengths we build an OLS model (no scaling involved).
+ Given below is the coefficient matrix that relates the abosorbance spectrum
+ of the maximum wavelengths to the concentrations 
+\begin_inset Formula $C=XA$
+\end_inset
+
+, 
+\begin_inset Formula $X$
+\end_inset
+
+ is the data matrix while 
+\begin_inset Formula $A,C$
+\end_inset
+
+ are the coefficient and concentration matrices respectively.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+A=[\begin{array}{ccc}
+-0.0047 & -0.0031 & 0.2150\\
+0.2671 & -7.216 & -0.2803\\
+-0.2251 & 0.8106 & 0.2321
+\end{array}]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here each column corresponds the to coefficients for each element in order.
+\end_layout
+
+\begin_layout Standard
+The RMSE error is also reported for each of the variables as 
+\begin_inset Formula $\begin{array}{ccc}
+Co=7.564e-4 & Ni=0.0025 & Cr=7.513e-4\end{array}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Paragraph*
+(b)PCR :
+\end_layout
+
+\begin_layout Standard
+We take all the 176 variables for create our PC's.
+ For applying PCA, we autoscale the data across the samples dimension.
+ We then perform SVD over the autoscaled data and iteratively calculate
+ RMSE error over 1 to 104 PC's, 104 is the maximum number of PC's obtainable
+ instead of 176 as the number samples of 104 limits this.
+ Following is the graph showing the RMSE values over all the PC's chosen.
+ Minimum RMSE we obtain is at 80 PC's with a value of 
+\begin_inset Formula $0.0196$
+\end_inset
+
+ in the scaled domain.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename 2bRMSE.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+RMSE plot for PCR
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Using the condition of capturing 99% of variaance over the data, the number
+ of PC's we obtain are 
+\begin_inset Formula $40$
+\end_inset
+
+.
+ Hence using PCR and LOOCV as it is we identify 40 different underlying
+ species in our measurement.
+\end_layout
+
+\begin_layout Paragraph*
+(b2)PCR-averaged :
+\end_layout
+
+\begin_layout Standard
+Averaging the data we reduce our number of samples to 26 thereby limiting
+ our maximum number of PC's to 26 too.
+ We follow just as in the previous case and plot our RMSE values.
+ Minimum RMSE we obtain is at 24 PC's with a value of 
+\begin_inset Formula $0.0926$
+\end_inset
+
+ in the scaled domain.
+ Indicating no improvement of our model over the non averaged case.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename 2b2RMSE.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+RMSE plot for PCR-averaged
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Using the condition of capturing 99% of variaance over the data, the number
+ of PC's we obtain are 
+\begin_inset Formula $18$
+\end_inset
+
+.
+ Hence using PCR and LOOCV as identify 18 different underlying species in
+ our measurement.
+\end_layout
+
+\begin_layout Paragraph*
+(c)MLPCR :
+\end_layout
+
+\begin_layout Standard
+From the given data we can estimate there exists some error function for
+ each measurement.
+ 
+\end_layout
+
+\begin_layout Standard
+For the first case we suppose this error function stays constant over each
+ mixture or atleast doesn't vary much from mixture to mixture.
+ Plotting the error standard deviation across the wavelengths for each of
+ the 26 different mixture we observe this assumption is true and also we
+ verfiy that the measurements are very noise towards the ends of the absorbance
+ spectrum.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename 2cwl1.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Error standard deviations across wavelengths for all mixtures
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let us average this over all the samples for better observations.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename 2cwl2.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Error standard deviations across wavelengths averaged for all mixtures
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We shall also plot the error standard deviations across mixtures to check
+ if they are significant.
+ From the plot it is plain to observe there isn't much change or atleast
+ changes in the error standard deviations are not as as significant as across
+ the wavelengths.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename 2cmix2.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Error standard deviations across mixtures
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We use the error standard deviation obtained across wavelengths to scale
+ our data and obtain equal error standard deviations for PCA application.
+\end_layout
+
+\begin_layout Standard
+We as usual perform SVD and repeat the steps as in the previous cases.
+ This time though we see a huge improvements in the number of PC's required
+ to capture 99% of the data variance as only 3 are sufficient.
+ This is also verified by the RMSE plot we get which sees no further improvement
+ at all after rapidly reducing over the first three variables.
+ The minimum RMSE error value is also very small at 
+\begin_inset Formula $1.9742e-4$
+\end_inset
+
+.
+ Though this in a different scaled domain it is still comparitively much
+ less than the previous cases.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename 2cRMSE.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+RMSE plot for MLPCR 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence using MLPCR and LOOCV we identify 3 different underlying species in
+ our measurement.
+\end_layout
+
+\begin_layout Paragraph*
+(d)IPCR :
+\end_layout
+
+\begin_layout Standard
+We shall now couple the methods used in question 
+\begin_inset Formula $1c$
+\end_inset
+
+ and 
+\begin_inset Formula $2c$
+\end_inset
+
+ to apply IPCA.
+ First we apply IPCA to our data and use the helper function 
+\begin_inset Formula $stdest()$
+\end_inset
+
+ to calculate the estimated standard deviation errors and number of independent
+ variables which come out to be 
+\begin_inset Formula $3$
+\end_inset
+
+.
+ We then scale our data using the estimated standard deviations and apply
+ PCA.
+ We reapeat the steps followed in previous cases to find the number of PC's
+ to capture 99% variance is 
+\begin_inset Formula $2$
+\end_inset
+
+.
+ Verified by the RMSE plot we get which sees no further improvement at all
+ after rapidly reducing over the first two variables.
+ The minimum RMSE error value is also very small at 
+\begin_inset Formula $1.7468e-4$
+\end_inset
+
+ which is further improved over the previous MLPCR case.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename 2dRMSE.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+RMSE plot for MLPCR 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence using IPCR and LOOCV we identify 2 different underlying species in
+ our measurement.
+\end_layout
+
+\begin_layout Standard
+We finally compare our estimated standard deviations to the true standard
+ deviations.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename 2dwl.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Estimated vs true Standard deviations plot 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

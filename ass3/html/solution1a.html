@@ -1,0 +1,192 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>solution1a</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-03-27"><meta name="DC.source" content="solution1a.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput">clc
+clear <span class="string">all</span>
+load <span class="string">flowdata2</span>
+
+<span class="comment">%load into memory basic shape of the matrix for further use</span>
+shapeF = size(Fmeas);
+
+<span class="comment">%create the cholesky inverse for the measured data</span>
+Linv = diag(1./stdtrue);
+
+<span class="comment">%scale the corresponding data to obtain equal error standard deviations and</span>
+<span class="comment">%hence the variances across all the data, so that PCA is applicable</span>
+Fs = Fmeas*Linv/sqrt(shapeF(1));
+
+<span class="comment">%perform svd of the above scaled matrix and true data matrix</span>
+[u s v] = svd(Fs);
+[ut st vt] = svd(Ftrue/sqrt(shapeF(1)));
+
+<span class="comment">%use the eigen vectors to create the contsraint matrices</span>
+Ahat = fliplr(v)'*Linv;<span class="comment">%scaling back the constraint coefficients to original space</span>
+Atrue = fliplr(vt)';
+
+<span class="comment">%input the independent variables we are choosing</span>
+indep = [1 1 1 0 0];
+eqns = shapeF(2)-sum(indep);<span class="comment">%number of dependent variables</span>
+
+<span class="comment">%slice the constraint matrices by selecting those eigen vectors corresponding to the</span>
+<span class="comment">%lowest number of eigenvalues such that number of rows in the new contsraint</span>
+<span class="comment">%matrices are the as same the number of dependent variables so that an inverse</span>
+<span class="comment">%can be defined</span>
+Ahat = Ahat(1:eqns,:);
+Atrue = Atrue(1:eqns,:);
+
+<span class="comment">%allocate independent and dependent matrices for speed before filling</span>
+AI = zeros(eqns,sum(indep));
+AIhat = AI;
+AD = zeros(eqns,eqns);
+ADhat = AD;
+itr1=0;
+itr2=0;
+<span class="keyword">for</span> i = 1:shapeF(2)
+    <span class="keyword">if</span> indep(i)==0
+        itr1=itr1+1;
+        AD(:,itr1) =  Atrue(:,i);
+        ADhat(:,itr1) =  Ahat(:,i);
+    <span class="keyword">elseif</span> indep(i)==1
+        itr2=itr2+1;
+        AI(:,itr2) =  Atrue(:,i);
+        AIhat(:,itr2) =  Ahat(:,i);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">%calculate the relational matrices betweent the dependent and independent</span>
+<span class="comment">%variables</span>
+R = -inv(AD)*AI;
+Rhat = -inv(ADhat)*AIhat;
+<span class="comment">%find difference between them to compare how accurately we have measured</span>
+<span class="comment">%the original constraints</span>
+Diff = R-Rhat;
+maxDiff = max(max(abs(R-Rhat)));
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+clc
+clear all
+load flowdata2
+
+%load into memory basic shape of the matrix for further use
+shapeF = size(Fmeas);
+
+%create the cholesky inverse for the measured data
+Linv = diag(1./stdtrue);
+
+%scale the corresponding data to obtain equal error standard deviations and
+%hence the variances across all the data, so that PCA is applicable
+Fs = Fmeas*Linv/sqrt(shapeF(1));
+
+%perform svd of the above scaled matrix and true data matrix
+[u s v] = svd(Fs);
+[ut st vt] = svd(Ftrue/sqrt(shapeF(1)));
+
+%use the eigen vectors to create the contsraint matrices
+Ahat = fliplr(v)'*Linv;%scaling back the constraint coefficients to original space
+Atrue = fliplr(vt)';
+
+%input the independent variables we are choosing
+indep = [1 1 1 0 0];
+eqns = shapeF(2)-sum(indep);%number of dependent variables
+
+%slice the constraint matrices by selecting those eigen vectors corresponding to the
+%lowest number of eigenvalues such that number of rows in the new contsraint
+%matrices are the as same the number of dependent variables so that an inverse
+%can be defined
+Ahat = Ahat(1:eqns,:);
+Atrue = Atrue(1:eqns,:);
+
+%allocate independent and dependent matrices for speed before filling
+AI = zeros(eqns,sum(indep));
+AIhat = AI;
+AD = zeros(eqns,eqns);
+ADhat = AD;
+itr1=0;
+itr2=0;
+for i = 1:shapeF(2)
+    if indep(i)==0
+        itr1=itr1+1;
+        AD(:,itr1) =  Atrue(:,i);
+        ADhat(:,itr1) =  Ahat(:,i);
+    elseif indep(i)==1
+        itr2=itr2+1;
+        AI(:,itr2) =  Atrue(:,i);
+        AIhat(:,itr2) =  Ahat(:,i);
+    end
+end
+
+%calculate the relational matrices betweent the dependent and independent
+%variables
+R = -inv(AD)*AI;
+Rhat = -inv(ADhat)*AIhat;
+%find difference between them to compare how accurately we have measured
+%the original constraints
+Diff = R-Rhat;
+maxDiff = max(max(abs(R-Rhat)));
+##### SOURCE END #####
+--></body></html>
